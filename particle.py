@@ -24,6 +24,9 @@ class Particle:
             self.ypos = ypos 
             self.v_y = v_y 
     
+    def __repr__(self):
+        return f"X-position: {self.x} X-velocity: {self.vx}"
+        
     @property 
     def x(self):
         return self.xpos 
