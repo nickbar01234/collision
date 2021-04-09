@@ -15,7 +15,9 @@ class System:
     
     def __call__(self, delta_t: float, particle: Particle):
         '''
-        * Apply kinematic equations on a particle. 
+        * Apply kinematic equations on a particle.
+        * particle: An object to apply kinematic equations. 
+        * delta_t: Time step.  
         '''
         particle.vx = particle.vx[-1] + self.acceleration * delta_t  
         particle.x = particle.x[-1] + (0.5 * np.sum(*particle.vx[-2:]) * delta_t)
