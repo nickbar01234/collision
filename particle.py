@@ -63,8 +63,13 @@ class Particle:
     def __overlap(self, other):
         '''
         * Check if two particles are overlapped. 
+        * Parameters: 
+            - other: another instance of Particle. 
         '''
         return other.x[-1] <= self.x[-1] and self.x[-1] - self.width <= other.x[-1] 
     
     def ke(self):
+        '''
+        * Compute the kinetic energy of this particle.
+        '''
         return 0.5 * self.mass * (self.vx[-1] ** 2 + self.vy[-1] ** 2) 
