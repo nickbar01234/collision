@@ -5,11 +5,10 @@
 import numpy as np 
 
 class Particle:
-    def __init__(self, mode: str, length: float, width: float, mass: float,
+    def __init__(self, length: float, width: float, mass: float,
                  x: float, y: float, vx: float, 
                  vy: float):
 
-        assert mode in ["1D", "2D"], "Mode must be 1D or 2D"
         assert (length and width) > 0, "Particle must have size"
         assert mass > 0, "Particle must have mass"
 
@@ -19,14 +18,15 @@ class Particle:
 
         self.xpos = []; self.x = x 
         self.v_x = []; self.vx = vx 
-
-        if mode == "2D":
-            self.ypos = []; self.y = y
-            self.v_y = []; self.vy = vy 
+        self.ypos = []; self.y = y
+        self.v_y = []; self.vy = vy 
 
 
     def __repr__(self):
-        return f"X-position: {self.x[-1]} X-velocity: {self.vx[-1]}"
+        return f"""
+        X-position: {self.x[-1]} X-velocity: {self.vx[-1]} \
+        Y-position: {self.y[-1]} Y-velocity: {self.vy[-1]}
+        """
         
     @property 
     def x(self):
@@ -64,10 +64,18 @@ class Particle:
         '''
         * Check if two particles are overlapped. 
         * Parameters: 
-            - other: another instance of Particle. 
+            - other: Another instance of Particle. 
         '''
-        return other.x[-1] <= self.x[-1] and self.x[-1] - self.width <= other.x[-1] 
-    
+
+        overlap = False 
+
+        if (other.x <= self.x) and (other.x >= self.x - self.length):
+            overlap = True  
+        elif other.x - other.length <= self.x:
+            overlap = True 
+        
+        return overlap 
+
     def ke(self):
         '''
         * Compute the kinetic energy of this particle.

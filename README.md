@@ -10,6 +10,13 @@ and 2-dimensions.
 <img src="https://render.githubusercontent.com/render/math?math=\triangle P=P_f-P_o">
 <img src="https://render.githubusercontent.com/render/math?math=P=\sum_{i=1}^n m_iv_i$$$$\sum_{i=1}^n m_i v_{i, o}=\sum_{i=1}^n m_i v_{i, f}">
 ---
+## Checkpoint 
+---
+1) Object representation of a particle 
+    * Check if two particles are overlapped 
+    * Compute kinetic energy of a particle 
+2) 
+---
 ## TODO 
 --- 
 1) Check if kinematic equations 
