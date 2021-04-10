@@ -47,7 +47,7 @@ class Simulation:
             - For random initialization, mass, length, and width are set to 1. 
         '''
         np.random.seed(42)
-        
+
         print("Begin random initialization")
 
         mass = 1 #kg 
@@ -73,11 +73,11 @@ class Simulation:
             particle = Particle(length, width, mass, x, y, v_x, v_y)
             self.particles.append(particle)
         
+        print(self.__repr__())
         print("Finish random initialization")
 
 if __name__ == "__main__":
     simulation = Simulation(**simulation_info)
-    pprint.pprint(simulation)      
 
             
             
