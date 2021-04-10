@@ -4,7 +4,7 @@ from system import *
 import numpy as np 
 
 #Sample system info 
-system_info = {
+simulation_info = {
     "mode": "1D",
     "particles": [],
     "n_particles": 2,
@@ -25,7 +25,7 @@ class Simulation:
         assert simulation_info["mode"] in ["1D", "2D"], "Simluation must be 1D or 2D"
         self.mode = simulation_info["mode"]
         
-        assert (simulation_info["length"] and simulation_info["width"]) > 0, \
+        assert (simulation_info["length"] and simulation_info["width"]) >= 0, \
         "Grid cannot have negative value"
         self.length = simulation_info["length"]
         self.width = simulation_info["width"]
@@ -33,12 +33,16 @@ class Simulation:
         self.particles = [] 
         if len(simulation_info["particles"]) == 0:
             self.__init_particles(
-               simluation_info["n_particles"], simulation_info["max_vx"], 
+               simulation_info["n_particles"], simulation_info["max_vx"], 
                simulation_info["max_vy"]
             )
         else: 
             self.particles = simulation_info["particles"]
     
+    def __repr__(self):
+        return f"Mode: {self.mode}, Length: {self.length}, " + \
+            f"Width: {self.width}, \n{self.particles}" 
+
     def __init_particles(self, n_particles: int, max_vx: int, max_vy: int):
         '''
         * If not reading from file, then randomly generate a simulation of 
@@ -74,8 +78,10 @@ class Simulation:
         
         print("Finish random initialization")
 
-        
+import pprint
+if __name__ == "__main__":
+    simulation = Simulation(simulation_info, system_info = None)
+    pprint.pprint(simulation)      
 
             
-
             

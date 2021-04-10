@@ -23,10 +23,8 @@ class Particle:
 
 
     def __repr__(self):
-        return f"""
-        X-position: {self.x[-1]} X-velocity: {self.vx[-1]} \
-        Y-position: {self.y[-1]} Y-velocity: {self.vy[-1]}
-        """
+        return f"X: {self.x[-1]} XV: {self.vx[-1]} " + \
+        f"Y: {self.y[-1]} YV: {self.vy[-1]}"
         
     @property 
     def x(self):
