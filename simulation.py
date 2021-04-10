@@ -2,8 +2,9 @@ from particle import *
 from system import * 
 
 import numpy as np 
+import pprint
 
-#Sample system info 
+#Sample simulation info 
 simulation_info = {
     "mode": "1D",
     "particles": [],
@@ -15,32 +16,27 @@ simulation_info = {
 }
 
 class Simulation:
-    def __init__(self, simulation_info: dict, system_info: dict):
+    def __init__(self, mode: str, particles: list, n_particles: int, 
+                 length: int, width: int, max_vx: int, max_vy: int):
         '''
         * Parameters:
             - simulation_info: Contains information of the simulation.
             - system_info: Contains information of the system.
         '''
 
-        assert simulation_info["mode"] in ["1D", "2D"], "Simluation must be 1D or 2D"
-        self.mode = simulation_info["mode"]
+        assert mode in ["1D", "2D"], "Simluation must be 1D or 2D"
+        self.mode = mode
         
-        assert (simulation_info["length"] and simulation_info["width"]) >= 0, \
-        "Grid cannot have negative value"
-        self.length = simulation_info["length"]
-        self.width = simulation_info["width"]
+        assert (length and width) >= 0, "Grid cannot have negative value"
+        self.length = length
+        self.width = width
 
-        self.particles = [] 
-        if len(simulation_info["particles"]) == 0:
-            self.__init_particles(
-               simulation_info["n_particles"], simulation_info["max_vx"], 
-               simulation_info["max_vy"]
-            )
-        else: 
-            self.particles = simulation_info["particles"]
+        self.particles = particles
+        if len(self.particles) == 0:
+            self.__init_particles(n_particles, max_vx, max_vy)
     
     def __repr__(self):
-        return f"Mode: {self.mode}, Length: {self.length}, " + \
+        return f"Configuration\nMode: {self.mode}, Length: {self.length}, " + \
             f"Width: {self.width}, \n{self.particles}" 
 
     def __init_particles(self, n_particles: int, max_vx: int, max_vy: int):
@@ -50,7 +46,8 @@ class Simulation:
         * NOTE: 
             - For random initialization, mass, length, and width are set to 1. 
         '''
-
+        np.random.seed(42)
+        
         print("Begin random initialization")
 
         mass = 1 #kg 
@@ -78,9 +75,8 @@ class Simulation:
         
         print("Finish random initialization")
 
-import pprint
 if __name__ == "__main__":
-    simulation = Simulation(simulation_info, system_info = None)
+    simulation = Simulation(**simulation_info)
     pprint.pprint(simulation)      
 
             
