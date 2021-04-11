@@ -41,7 +41,9 @@ class System:
         else:
             a_y = 0
 
-        return self.__compute_velocity(a_x, a_y, delta_t, particle)
+        particle = self.__compute_velocity(a_x, a_y, delta_t, particle)
+        
+        return particle 
 
     def __compute_velocity(self, a_x: float, a_y: float, delta_t: float, 
                            particle: Particle):
@@ -52,9 +54,9 @@ class System:
         #Remove current kinetic energy with respect to old velocity 
         self.ke = -1 * particle.ke()
         particle.vx = particle.vx[-1] + a_x * delta_t  
-        particle.x = particle.x[-1] + (0.5 * np.sum(*particle.vx[-2:]) * delta_t)
+        particle.x = particle.x[-1] + (0.5 * sum(particle.vx[-2:])* delta_t)
         particle.vy = particle.vy[-1] + a_y * delta_t
-        particle.y = particle.y[-1] + (0.5 * np.sum(*particle.vy[-2:]) * delta_t)
+        particle.y = particle.y[-1] + (0.5 * sum(particle.vy[-2:]) * delta_t)
         
         #Change current kinetic energy with respect to new velocity 
         self.ke = particle.ke() 

@@ -3,6 +3,8 @@ from system import *
 
 import numpy as np 
 import pprint
+from matplotlib import animation 
+import itertools 
 
 #Sample simulation info 
 simulation_info = {
@@ -12,17 +14,19 @@ simulation_info = {
     "length": 10, 
     "width": 0,
     "max_vx": 2, 
-    "max_vy": 0
+    "max_vy": 0,
+    "delta_t": 1e-3
+}
+
+#Sample sytstem info 
+system_info = {
+    "kinetic_friction": 0
 }
 
 class Simulation:
     def __init__(self, mode: str, particles: list, n_particles: int, 
-                 length: int, width: int, max_vx: int, max_vy: int):
-        '''
-        * Parameters:
-            - simulation_info: Contains information of the simulation.
-            - system_info: Contains information of the system.
-        '''
+                 length: int, width: int, max_vx: int, max_vy: int, 
+                 delta_t: float, system_info: dict):
 
         assert mode in ["1D", "2D"], "Simluation must be 1D or 2D"
         self.mode = mode
@@ -31,15 +35,21 @@ class Simulation:
         self.length = length
         self.width = width
 
+        assert delta_t >= 0, "Time steps cannot be zero or negative"
+        self.delta_t = delta_t 
+        
         self.particles = particles
         if len(self.particles) == 0:
             self.__init_particles(n_particles, max_vx, max_vy)
-    
+        
+        self.system = System(self.particles, **system_info)
+
     def __repr__(self):
         return f"Configuration\nMode: {self.mode}, Length: {self.length}, " + \
             f"Width: {self.width}, \n{self.particles}" 
 
     def __init_particles(self, n_particles: int, max_vx: int, max_vy: int):
+
         '''
         * If not reading from file, then randomly generate a simulation of 
         n particles. 
@@ -58,9 +68,9 @@ class Simulation:
         vx = [v for v in range(-1 * max_vx, max_vx + 1) if v != 0]
         vy = [v for v in range(-1 * max_vy, max_vy + 1) if v != 0]
 
-        for i in range(n_particles):
-            x = np.random.choice(xpos)
-            v_x = np.random.choice(vx)
+        for index, i in enumerate(range(n_particles)):
+            x = int(np.random.choice(xpos))
+            v_x = int(np.random.choice(vx))
             xpos.pop(xpos.index(x)) #Remove xposition so there won't be overlaps 
 
             y = 0
@@ -70,14 +80,62 @@ class Simulation:
                 v_y = np.random.choice(vy)
                 ypos.pop(ypos.index(y)) #Remove yposition so there won't be overlaps  
 
-            particle = Particle(length, width, mass, x, y, v_x, v_y)
+            particle = Particle(index, length, width, mass, x, y, v_x, v_y)
             self.particles.append(particle)
         
         print(self.__repr__())
         print("Finish random initialization")
 
+    def __init_animation(self):
+        '''
+        * Initialize the initial frame for animation. 
+        '''
+        position = []
+
+        for particle in self.particles:
+            position.append(particle.draw())
+        
+        return position 
+
+    def __animate(self):
+        '''
+        * Compute new position and velocity for every particle by a time step 
+        delta_t
+        '''
+
+        for index, particle in enumerate(len(self.particles)):
+            self.particles[index] = self.system(self.delta_t, particle)
+        
+        #Apply conservation of momentum for any collisions
+        self.__collision()
+
+        return self.particles 
+    
+    def __collision(self):
+        pass 
+    
+    def animation(self):
+        '''
+        * Add animations to object. The computation is done from function call 
+        to __animate().
+        '''
+
+        fig, ax = plt.subplots()
+        for spine in ["top", "bottom", "left", "right"]:
+            self.ax.spines[spine].set_linewidth(2)
+        self.ax.set_aspect("equal", "box")
+        self.ax.set_xlim(0, self.length)
+        self.ax.set_ylim(0, self.width)
+        self.ax.xaxis.x_ticks([])
+        self.ax.yaxis.y_ticks([])
+
+        self.animate = animation.FuncAnimation(
+            fig, self.__animate, init_func = self.__init_animation, 
+        )
+        
 if __name__ == "__main__":
-    simulation = Simulation(**simulation_info)
+    simulation = Simulation(**simulation_info, system_info = system_info)
+    # simulation.run()
 
             
             
