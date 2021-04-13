@@ -10,14 +10,11 @@ class System:
     def __init__(self, particles: list, kinetic_friction: float):
         assert len(particles) > 0, "System must have at least 1 particle"
 
-        self.kinetic_energy = sum([p.ke() for p in particles])
+        self._ke = sum([p.ke() for p in particles])
         self.acceleration = kinetic_friction * 9.8 # m/s^2
     
     def __repr__(self):
-        return f"""
-        System energy: {self.kinetic_energy} Acceleration due to friction: \
-        {self.acceleration}
-        """
+        return f"System({self.ke},{self.acceleration / 9.8})"
         
     def __call__(self, delta_t: float, particle: Particle):
         '''
@@ -54,7 +51,7 @@ class System:
         #Remove current kinetic energy with respect to old velocity 
         self.ke = -1 * particle.ke()
         particle.vx = particle.vx[-1] + a_x * delta_t  
-        particle.x = particle.x[-1] + (0.5 * sum(particle.vx[-2:])* delta_t)
+        particle.x = particle.x[-1] + (0.5 * sum(particle.vx[-2:]) * delta_t)
         particle.vy = particle.vy[-1] + a_y * delta_t
         particle.y = particle.y[-1] + (0.5 * sum(particle.vy[-2:]) * delta_t)
         
@@ -63,10 +60,48 @@ class System:
 
         return particle     
 
+    def wall(self, particle: Particle, length: int, width: int):
+        '''
+        * Bounces the particle of the wall. A simplification is that the 
+        particle will have the same speed but opposite direction.
+        * TODO: Remove data that are out of bounds. 
+        '''
+        
+        if particle.x[-1] < 0:  
+            vox = self.__v_f(particle.x[-1], particle.vx[-1])
+            particle.x = 0
+            particle.vx = vox 
+        elif particle.x[-1] > length:
+            vox = self.__v_f(particle.x[-1], particle.vx[-1])
+            particle.x = length - particle.length 
+            particle.vx = -1 * vox 
+        elif particle.x[-1] + particle.length > length: 
+            vox = self.__v_f(particle.x[-1] + particle.length - length, particle.vx[-1])
+            particle.x = length - particle.length 
+            particle.vx = -1 * vox
+    
+        return particle  
+        
+    def __v_f(self, distance: float, velocity: float):
+        '''
+        * Compute the velocity before the particle hits the wall.
+        * NOTE: 
+            - If acceleration is negative then the initial velocity is also negative. 
+        '''
+
+        if velocity > 0:
+            acceleration = self.acceleration 
+        else:
+            acceleration = -1 * self.acceleration 
+
+        v_o = np.sqrt(velocity ** 2 - 2 * acceleration * distance)
+
+        return v_o
+
     @property 
     def ke(self):
-        return self.kinetic_energy
+        return self._ke
     
     @ke.setter 
     def ke(self, value: int):
-        self.kinetic_energy += value 
+        self._ke += value 

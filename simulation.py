@@ -3,6 +3,8 @@ from system import *
 
 import numpy as np 
 import pprint
+
+import matplotlib.pyplot as plt 
 from matplotlib import animation 
 import itertools 
 
@@ -12,21 +14,23 @@ simulation_info = {
     "particles": [],
     "n_particles": 2,
     "length": 10, 
-    "width": 0,
-    "max_vx": 2, 
+    "width": 5,
+    "max_vx": 10, 
     "max_vy": 0,
-    "delta_t": 1e-3
+    "delta_t": 1e-2
 }
 
 #Sample sytstem info 
 system_info = {
-    "kinetic_friction": 0
+    "kinetic_friction": 0.1
 }
 
 class Simulation:
     def __init__(self, mode: str, particles: list, n_particles: int, 
                  length: int, width: int, max_vx: int, max_vy: int, 
                  delta_t: float, system_info: dict):
+        
+        self.index = 0 
 
         assert mode in ["1D", "2D"], "Simluation must be 1D or 2D"
         self.mode = mode
@@ -35,7 +39,7 @@ class Simulation:
         self.length = length
         self.width = width
 
-        assert delta_t >= 0, "Time steps cannot be zero or negative"
+        assert delta_t >= 0, "Time step cannot be zero or negative"
         self.delta_t = delta_t 
         
         self.particles = particles
@@ -93,49 +97,72 @@ class Simulation:
         position = []
 
         for particle in self.particles:
-            position.append(particle.draw())
+            position.append(particle.draw(self.ax))
         
         return position 
 
-    def __animate(self):
+    def __animate(self, frame: int):
         '''
         * Compute new position and velocity for every particle by a time step 
         delta_t
         '''
+        if self.system.ke <= 0:
+            print("System is out of kinetic energy. Quitting the program")
+            exit(0)
 
-        for index, particle in enumerate(len(self.particles)):
+        for index, particle in enumerate(self.particles):
             self.particles[index] = self.system(self.delta_t, particle)
         
+        # for particle in self.particles:
+        #     print(str(particle))
         #Apply conservation of momentum for any collisions
         self.__collision()
 
-        return self.particles 
+        return self.__init_animation()
     
     def __collision(self):
-        pass 
-    
+        '''
+        * Apply momentum of conservation if particles collided with walls or 
+        each other.
+        ''' 
+
+        for index, particle in enumerate(self.particles):
+            self.particles[index] = self.system.wall(
+                particle, self.length, self.width 
+            )
+            
+        # for i, j in itertools.product(len(self.particles), 2):
+        #     if (self.particles[i].overlap(self.particles[j])):
+        #         self.particles[i], self.particles[j] = self.system.momentum(
+        #             self.particles[i], self.particles[j]
+        #         )        
+
     def animation(self):
         '''
         * Add animations to object. The computation is done from function call 
         to __animate().
         '''
 
-        fig, ax = plt.subplots()
+        fig, self.ax = plt.subplots()
         for spine in ["top", "bottom", "left", "right"]:
             self.ax.spines[spine].set_linewidth(2)
         self.ax.set_aspect("equal", "box")
         self.ax.set_xlim(0, self.length)
         self.ax.set_ylim(0, self.width)
-        self.ax.xaxis.x_ticks([])
-        self.ax.yaxis.y_ticks([])
+        self.ax.xaxis.set_ticks([])
+        self.ax.yaxis.set_ticks([])
 
         self.animate = animation.FuncAnimation(
             fig, self.__animate, init_func = self.__init_animation, 
+            frames = 800, interval = 2, blit = True
         )
+        
+        plt.show()
+        
         
 if __name__ == "__main__":
     simulation = Simulation(**simulation_info, system_info = system_info)
-    # simulation.run()
+    simulation.animation()
 
             
             

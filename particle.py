@@ -20,13 +20,17 @@ class Particle:
         self.width = width 
         self.mass = mass 
 
-        self.xpos = []; self.x = x 
-        self.v_x = []; self.vx = vx 
-        self.ypos = []; self.y = y
-        self.v_y = []; self.vy = vy 
+        self._x = []; self.x = x 
+        self._vx = []; self.vx = vx 
+        self._y = []; self.y = y
+        self._vy = []; self.vy = vy 
 
 
     def __repr__(self):
+        return f"Particle({self.id}, {self.length}, {self.width}, {self.mass}, " \
+        + f"{self.x[-1]}, {self.y[-1]}, {self.vx[-1]}, {self.vy[-1]})"
+    
+    def __str__(self):
         return f"ID: {self.id} x: {self.x[-1]} xv: {self.vx[-1]} " + \
         f"y: {self.y[-1]} yv: {self.vy[-1]}"
     
@@ -40,52 +44,53 @@ class Particle:
 
     @property 
     def x(self):
-        return self.xpos 
+        return self._x 
     
     @x.setter 
     def x(self, value: int):
-        self.xpos.append(value) 
+        self._x.append(value)
     
     @property 
     def y(self):
-        return self.ypos 
+        return self._y 
     
     @y.setter 
     def y(self, value: int):
-        self.ypos.append(value)
+        self._y.append(value)
     
     @property 
     def vx(self):
-        return self.v_x 
+        return self._vx 
     
     @vx.setter 
     def vx(self, value: int):
-        self.v_x.append(value)
+        self._vx.append(value)
     
     @property 
     def vy(self):
-        return self.v_y 
+        return self._vy 
     
     @vy.setter 
     def vy(self, value: int):
-        self.v_y.append(value)
+        self._vy.append(value)
 
-    def __overlap(self, other):
+    def overlap(self, other):
         '''
         * Check if two particles are overlapped. 
         * Parameters: 
             - other: Another instance of Particle. 
         '''
         overlap = False 
-        if self == other:
-            return overlap  
-        else: 
-            if (other.x <= self.x) and (other.x >= self.x - self.length):
-                overlap = True  
-            elif other.x - other.length <= self.x:
+        if self != other:
+            #Check in x-direction
+            if not (self.x[-1] <= other.x[-1] and self.x[-1] + self.length <= other.x[-1]):
                 overlap = True 
             
-            return overlap 
+            #Check in y-direction
+            # if not (self.y <= other.y and self.y + self.width <= other.y):
+            #     overlap = True 
+
+        return overlap 
 
     def ke(self):
         '''
@@ -94,6 +99,6 @@ class Particle:
         return 0.5 * self.mass * (self.vx[-1] ** 2 + self.vy[-1] ** 2) 
     
     def draw(self, ax: plt.axes):
-        rectangle = Rectangle((self.x, self.y), self.length, self.width)
+        rectangle = Rectangle((self._x[-1], self._y[-1]), self.length, self.width)
         ax.add_patch(rectangle)
         return rectangle
