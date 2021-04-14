@@ -6,7 +6,9 @@ and 2-dimensions.
 ## Physics
 ---
 * **Defining the relationship between frictional force and acceleration**:
+
 ![image](https://user-images.githubusercontent.com/74647679/114636345-f4518780-9cf0-11eb-81bf-7655837fe313.png)
+
 * Friction is defined as <img src="https://render.githubusercontent.com/render/math?math=F_f=\mu_{f_k}\times N">
 * From the FBD, we get <img src="https://render.githubusercontent.com/render/math?math=F_k=\mu_{f_k}\times N=mg">
 * 
