@@ -5,13 +5,14 @@ and 2-dimensions.
 ---
 ## Physics
 ---
-* **Defining the relationship between frictional force and acceleration**:
+1) **Defining the relationship between frictional force and acceleration**:
 
 ![image](https://user-images.githubusercontent.com/74647679/114636345-f4518780-9cf0-11eb-81bf-7655837fe313.png)
 
-* Friction is defined as <img src="https://render.githubusercontent.com/render/math?math=F_f=\mu_{f_k}\times N">
-* From the FBD, we get <img src="https://render.githubusercontent.com/render/math?math=F_k=\mu_{f_k}\times N=mg">
-* 
+* Friction is defined as <img src="https://render.githubusercontent.com/render/math?math=F_f=\mu_{f_k}\times N"> 
+* From the FBD, we get <img src="https://render.githubusercontent.com/render/math?math=F_k=\mu_{f_k}\times N=\mu_{f_k}mg">
+* Applying Newton's second law of motion, we get <img src="https://render.githubusercontent.com/render/math?math=\pmF_f=\pm\mu_{f_k}=ma">, where frictional force is pointing in the positive direction if the object has a negative velocity, and vice versa. 
+
 <img src="https://render.githubusercontent.com/render/math?math=N=m\times g">
 <img src="https://render.githubusercontent.com/render/math?math=\triangle P=P_f-P_o">
 <img src="https://render.githubusercontent.com/render/math?math=P=\sum_{i=1}^n m_iv_i$$$$\sum_{i=1}^n m_i v_{i, o}=\sum_{i=1}^n m_i v_{i, f}">
