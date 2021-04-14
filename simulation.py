@@ -9,20 +9,32 @@ from matplotlib import animation
 import itertools 
 
 #Sample simulation info 
+# simulation_info = {
+#     "mode": "2D",
+#     "particles": [],
+#     "n_particles": 4,
+#     "length": 10, 
+#     "width": 10,
+#     "max_vx": 3, 
+#     "max_vy": 3,
+#     "delta_t": 1e-2
+# }
+
 simulation_info = {
-    "mode": "1D",
+    "mode": "2D",
     "particles": [],
-    "n_particles": 2,
+    "n_particles": 3,
     "length": 10, 
-    "width": 5,
-    "max_vx": 10, 
-    "max_vy": 0,
+    "width": 10,
+    "max_vx": 4, 
+    "max_vy": 4,
     "delta_t": 1e-2
 }
 
 #Sample sytstem info 
 system_info = {
-    "kinetic_friction": 0.1
+    "system_type": "elastic",
+    "kinetic_friction": 0.0
 }
 
 class Simulation:
@@ -51,6 +63,10 @@ class Simulation:
     def __repr__(self):
         return f"Configuration\nMode: {self.mode}, Length: {self.length}, " + \
             f"Width: {self.width}, \n{self.particles}" 
+
+    def __debug(self):
+        info = " ".join([str(particle) for particle in self.particles])
+        print(info)
 
     def __init_particles(self, n_particles: int, max_vx: int, max_vy: int):
 
@@ -113,8 +129,6 @@ class Simulation:
         for index, particle in enumerate(self.particles):
             self.particles[index] = self.system(self.delta_t, particle)
         
-        # for particle in self.particles:
-        #     print(str(particle))
         #Apply conservation of momentum for any collisions
         self.__collision()
 
@@ -130,13 +144,14 @@ class Simulation:
             self.particles[index] = self.system.wall(
                 particle, self.length, self.width 
             )
-            
-        # for i, j in itertools.product(len(self.particles), 2):
-        #     if (self.particles[i].overlap(self.particles[j])):
-        #         self.particles[i], self.particles[j] = self.system.momentum(
-        #             self.particles[i], self.particles[j]
-        #         )        
 
+        for i, j in itertools.combinations(range(len(self.particles)), 2):
+            overlap_x, overlap_y = self.particles[i].overlap(self.particles[j])
+            if (overlap_x or overlap_y):
+                self.particles[i], self.particles[j] = self.system.momentum(
+                    overlap_x, overlap_y, self.particles[i], self.particles[j]
+                )    
+        
     def animation(self):
         '''
         * Add animations to object. The computation is done from function call 

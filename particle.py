@@ -3,14 +3,12 @@
 '''
 
 import numpy as np 
-
 import matplotlib.pyplot as plt 
 from matplotlib.patches import Rectangle 
 
 class Particle:
     def __init__(self, particle_id: int, length: float, width: float, mass: float,
-                 x: float, y: float, vx: float, 
-                 vy: float):
+                 x: float, y: float, vx: float, vy: float):
 
         assert (length and width) > 0, "Particle must have size"
         assert mass > 0, "Particle must have mass"
@@ -24,7 +22,6 @@ class Particle:
         self._vx = []; self.vx = vx 
         self._y = []; self.y = y
         self._vy = []; self.vy = vy 
-
 
     def __repr__(self):
         return f"Particle({self.id}, {self.length}, {self.width}, {self.mass}, " \
@@ -80,17 +77,17 @@ class Particle:
         * Parameters: 
             - other: Another instance of Particle. 
         '''
-        overlap = False 
+        overlap_x, overlap_y = False, False
         if self != other:
             #Check in x-direction
             if not (self.x[-1] <= other.x[-1] and self.x[-1] + self.length <= other.x[-1]):
-                overlap = True 
+                overlap_x = True 
             
             #Check in y-direction
-            # if not (self.y <= other.y and self.y + self.width <= other.y):
-            #     overlap = True 
+            if self.y[-1] <= other.y[-1] and self.y[-1] + self.width >= other.y[-1]:
+                overlap_y = True 
 
-        return overlap 
+        return overlap_x, overlap_y
 
     def ke(self):
         '''
@@ -102,3 +99,20 @@ class Particle:
         rectangle = Rectangle((self._x[-1], self._y[-1]), self.length, self.width)
         ax.add_patch(rectangle)
         return rectangle
+    
+    def update(self, length: int = None, width: int = None):
+        '''
+        * Update list of positions and velocities if they are out of bound.
+        '''
+
+        if length is not None:
+            for x, vx in zip(self.x, self.vx):
+                if x < 0 or x > length:
+                    self.x.pop(self.x.index(x))
+                    self.vx.pop(self.vx.index(vx))
+        
+        if width is not None:
+            for y, vy in zip(self.y, self.vy):
+                if y < 0 or y > width:
+                    self.y.pop(self.y.index(y))
+                    self.vy.pop(self.vy.index(vy))
