@@ -11,7 +11,7 @@ and 2-dimensions.
 
 * Friction is defined as <img src="https://render.githubusercontent.com/render/math?math=F_f=\mu_{f_k}\times N"> 
 * From the FBD, we get <img src="https://render.githubusercontent.com/render/math?math=F_k=\mu_{f_k}\times N=\mu_{f_k}mg">
-* Applying Newton's second law of motion, we get <img src="https://render.githubusercontent.com/render/math?math=\pmF_f=\pm\mu_{f_k}=ma">, where frictional force is pointing in the positive direction if the object has a negative velocity, and vice versa. 
+* Applying Newton's second law of motion, we get <img src="https://render.githubusercontent.com/render/math?math=\pm F_f=\pm\mu_{f_k}=ma">, where frictional force is pointing in the positive direction if the object has a negative velocity, and vice versa. 
 
 <img src="https://render.githubusercontent.com/render/math?math=N=m\times g">
 <img src="https://render.githubusercontent.com/render/math?math=\triangle P=P_f-P_o">
