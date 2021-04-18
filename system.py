@@ -3,7 +3,7 @@
 '''
 
 from particle import * 
-from Computation import *
+from computation import *
 
 import numpy as np 
 

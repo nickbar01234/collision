@@ -38,10 +38,10 @@ class Computation:
         particle.x = particle.x[-1] + (0.5 * sum(particle.vx[-2:]) * delta_t)
         return particle 
     
-    def ____verlet(self, delta_t: float, particle: Particle, acceleration: float):
+    def __verlet(self, delta_t: float, particle: Particle, acceleration: float):
         '''
         * Approximate a particle's velocity and displacement using Verlet
-        algorithm. This is an mathematical equivalent of leap-frog algorithm.
+        algorithm. This is a mathematical equivalent of leap-frog algorithm.
         '''
 
         particle.x = particle.x[-1] + particle.vx[-1] * delta_t + 0.5 * \
