@@ -3,18 +3,22 @@
 '''
 
 from particle import * 
+from Computation import *
 
 import numpy as np 
 
 class System:
-    def __init__(self, particles: list, system_type: str, kinetic_friction: float):
+    def __init__(self, particles: list, system_type: str, kinetic_friction: float,
+                 computational_method: str):
+
         assert len(particles) > 0, "System must have at least 1 particle"
         assert system_type in ["elastic", "inelastic"], "Program only supports elastic or inelastic collision"
 
         self.system_type = system_type
         self._ke = sum([p.ke() for p in particles])
         self.acceleration = kinetic_friction * 9.8 # m/s^2
-    
+        self.computation = Computation(computational_method)
+
     def __repr__(self):
         return f"System({self.ke},{self.acceleration / 9.8})"
         
@@ -32,38 +36,13 @@ class System:
             a_x = -1 * self.acceleration 
         else:
             a_x = 0 
-        
-        if particle.vy[-1] < 0:
-            a_y = self.acceleration 
-        elif particle.vy[-1] > 0:
-            a_y = -1 * self.acceleration 
-        else:
-            a_y = 0
 
-        particle = self.__compute_velocity(a_x, a_y, delta_t, particle)
-        
-        return particle 
-
-    def __compute_velocity(self, a_x: float, a_y: float, delta_t: float, 
-                           particle: Particle):
-        '''
-        * Compute the new velocity of the Particle and change the system's 
-        total kinetic energy.  
-        '''
-        #Remove current kinetic energy with respect to old velocity 
         self.ke = -1 * particle.ke()
+        particle = self.computation(delta_t, particle, a_x)
+        self.ke = particle.ke()
 
-        particle.vx = particle.vx[-1] + a_x * delta_t  
-        particle.x = particle.x[-1] + (0.5 * sum(particle.vx[-2:]) * delta_t)
+        return particle 
         
-        particle.vy = particle.vy[-1] + a_y * delta_t
-        particle.y = particle.y[-1] + (0.5 * sum(particle.vy[-2:]) * delta_t)
-        
-        #Change current kinetic energy with respect to new velocity 
-        self.ke = particle.ke() 
-
-        return particle     
-
     def wall(self, particle: Particle, length: int, width: int):
         '''
         * Bounces the particle of the wall if collision is elastic, otherwise 
@@ -86,24 +65,7 @@ class System:
                 particle.x = length - particle.length 
                 particle.vx = 0
                 particle.vx = -1 * vox
-            
-            #Check y-direction
-            if particle.y[-1] < 0:  
-                voy = self.__v_f(particle.y[-1], particle.vy[-1])
-                particle.y = 0
-                particle.vy = 0
-                particle.vy = voy 
-            elif particle.y[-1] > width:
-                voy = self.__v_f(particle.y[-1], particle.vy[-1])
-                particle.y = width - particle.width
-                particle.vy = 0
-                particle.vy = -1 * voy 
-            elif particle.y[-1] + particle.width > width: 
-                voy = self.__v_f(particle.y[-1] + particle.width - width, particle.vy[-1])
-                particle.y = width - particle.width 
-                particle.vy = 0
-                particle.vy = -1 * voy 
-
+        
             particle.update(length, width)
 
         return particle  
@@ -124,37 +86,22 @@ class System:
 
         return v_o 
 
-    def momentum(self, overlap_x: bool, overlap_y: bool, particle_1: Particle, 
-                 particle_2: Particle):
+    def momentum(self, particle_1: Particle, particle_2: Particle):
         '''
         * Apply conservation of momentum on two particles in collision
         '''
+
         if self.system_type == "elastic":
-            return self.__elastic_collision(
-                overlap_x, overlap_y, particle_1, particle_2
-            )
+            mass = particle_1.mass + particle_2.mass 
 
-    def __elastic_collision(self, overlap_x: bool, overlap_y: bool, 
-                            particle_1: Particle, particle_2: Particle):
-        if overlap_x:
-            particle_1_vx_tmp = -1 * particle_1.vx[-1]
-            particle_1.vx = 0 
-            particle_1.vx = particle_1_vx_tmp 
-
-            particle_2_vx_tmp = -1 * particle_2.vx[-1]
-            particle_2.vx = 0
-            particle_2.vx = particle_2_vx_tmp
-            particle_2.x = particle_1.x[-1] + particle_1.length
-        
-        if overlap_y and overlap_x:
-            particle_1_vy_tmp = -1 * particle_1.vy[-1]
-            particle_1.vy = 0 
-            particle_1.vy = particle_1_vy_tmp 
-
-            particle_2_vy_tmp = -1 * particle_2.vy[-1]
-            particle_2.vy = 0
-            particle_2.vy = particle_2_vy_tmp
-            particle_2.y = particle_1.y[-1] + particle_1.width
+            v1 = (1 / mass) * (particle_1.mass - particle_2.mass) * particle_1.vx[-1] + \
+                (1 / mass) * (2 * particle_2.mass * particle_2.vx[-1])
+            
+            v2 = (1 / mass) * (2 * particle_2.mass * particle_1.vx[-1]) + \
+                (1 / mass) * (particle_2.mass - particle_1.mass) * particle_2.vx[-1]
+            
+            particle_1.vx = v1 
+            particle_2.vx = v2 
 
         return particle_1, particle_2 
 

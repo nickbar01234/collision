@@ -72,23 +72,11 @@ class Particle:
         self._vy.append(value)
 
     def overlap(self, other):
-        '''
-        * Check if two particles are overlapped. 
-        * Parameters: 
-            - other: Another instance of Particle. 
-        '''
-        overlap_x, overlap_y = False, False
         if self != other:
-            #Check in x-direction
-            if not (self.x[-1] <= other.x[-1] and self.x[-1] + self.length <= other.x[-1]):
-                overlap_x = True 
-            
-            #Check in y-direction
-            if self.y[-1] <= other.y[-1] and self.y[-1] + self.width >= other.y[-1]:
-                overlap_y = True 
-
-        return overlap_x, overlap_y
-
+            return True if not (self.x[-1] <= other.x[-1] and self.x[-1] + \
+                   self.length <= other.x[-1]) else False
+        return False 
+        
     def ke(self):
         '''
         * Compute the kinetic energy of this particle.
@@ -96,7 +84,8 @@ class Particle:
         return 0.5 * self.mass * (self.vx[-1] ** 2 + self.vy[-1] ** 2) 
     
     def draw(self, ax: plt.axes):
-        rectangle = Rectangle((self._x[-1], self._y[-1]), self.length, self.width)
+        rectangle = Rectangle((self._x[-1], self._y[-1]), self.length, self.width, 
+                               edgecolor = 'r', fill = False)
         ax.add_patch(rectangle)
         return rectangle
     
@@ -116,3 +105,5 @@ class Particle:
                 if y < 0 or y > width:
                     self.y.pop(self.y.index(y))
                     self.vy.pop(self.vy.index(vy))
+
+        

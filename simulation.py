@@ -9,32 +9,22 @@ from matplotlib import animation
 import itertools 
 
 #Sample simulation info 
-# simulation_info = {
-#     "mode": "2D",
-#     "particles": [],
-#     "n_particles": 4,
-#     "length": 10, 
-#     "width": 10,
-#     "max_vx": 3, 
-#     "max_vy": 3,
-#     "delta_t": 1e-2
-# }
-
 simulation_info = {
-    "mode": "2D",
+    "mode": "1D",
     "particles": [],
-    "n_particles": 3,
+    "n_particles": 2,
     "length": 10, 
     "width": 10,
-    "max_vx": 4, 
-    "max_vy": 4,
+    "max_vx": 8, 
+    "max_vy": 5,
     "delta_t": 1e-2
 }
 
 #Sample sytstem info 
 system_info = {
     "system_type": "elastic",
-    "kinetic_friction": 0.0
+    "kinetic_friction": 0.0,
+    "computational_method": "verlet"
 }
 
 class Simulation:
@@ -42,8 +32,6 @@ class Simulation:
                  length: int, width: int, max_vx: int, max_vy: int, 
                  delta_t: float, system_info: dict):
         
-        self.index = 0 
-
         assert mode in ["1D", "2D"], "Simluation must be 1D or 2D"
         self.mode = mode
         
@@ -76,7 +64,7 @@ class Simulation:
         * NOTE: 
             - For random initialization, mass, length, and width are set to 1. 
         '''
-        np.random.seed(42)
+        np.random.seed(1)
 
         print("Begin random initialization")
 
@@ -122,16 +110,14 @@ class Simulation:
         * Compute new position and velocity for every particle by a time step 
         delta_t
         '''
-        if self.system.ke <= 0:
+        if self.system.ke <= 0.5:
             print("System is out of kinetic energy. Quitting the program")
             exit(0)
 
         for index, particle in enumerate(self.particles):
             self.particles[index] = self.system(self.delta_t, particle)
-        
-        #Apply conservation of momentum for any collisions
-        self.__collision()
 
+        self.__collision()
         return self.__init_animation()
     
     def __collision(self):
@@ -144,13 +130,12 @@ class Simulation:
             self.particles[index] = self.system.wall(
                 particle, self.length, self.width 
             )
-
+        
         for i, j in itertools.combinations(range(len(self.particles)), 2):
-            overlap_x, overlap_y = self.particles[i].overlap(self.particles[j])
-            if (overlap_x or overlap_y):
+            if self.particles[i].overlap(self.particles[j]):
                 self.particles[i], self.particles[j] = self.system.momentum(
-                    overlap_x, overlap_y, self.particles[i], self.particles[j]
-                )    
+                    self.particles[i], self.particles[j]
+                )
         
     def animation(self):
         '''
@@ -169,9 +154,8 @@ class Simulation:
 
         self.animate = animation.FuncAnimation(
             fig, self.__animate, init_func = self.__init_animation, 
-            frames = 800, interval = 2, blit = True
+            frames = 1600, interval = 2, blit = True
         )
-        
         plt.show()
         
         
