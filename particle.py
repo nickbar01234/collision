@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle 
 
 class Particle:
-    def __init__(self, particle_id: int, length: float, width: float, mass: float,
-                 x: float, y: float, vx: float, vy: float):
+    def __init__(self, length: float, width: float, mass: float,
+                 x: float, y: float, vx: float, vy: float, particle_id: int = None):
 
         assert (length and width) > 0, "Particle must have size"
         assert mass > 0, "Particle must have mass"
@@ -84,6 +84,9 @@ class Particle:
         return 0.5 * self.mass * (self.vx[-1] ** 2 + self.vy[-1] ** 2) 
     
     def draw(self, ax: plt.axes):
+        '''
+        * Represent a particle for animation.
+        '''
         rectangle = Rectangle((self._x[-1], self._y[-1]), self.length, self.width, 
                                edgecolor = 'r', fill = False)
         ax.add_patch(rectangle)

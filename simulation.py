@@ -8,29 +8,10 @@ import matplotlib.pyplot as plt
 from matplotlib import animation 
 import itertools 
 
-#Sample simulation info 
-simulation_info = {
-    "mode": "1D",
-    "particles": [],
-    "n_particles": 2,
-    "length": 10, 
-    "width": 10,
-    "max_vx": 8, 
-    "max_vy": 5,
-    "delta_t": 1e-2
-}
-
-#Sample sytstem info 
-system_info = {
-    "system_type": "elastic",
-    "kinetic_friction": 0.0,
-    "computational_method": "verlet"
-}
-
 class Simulation:
     def __init__(self, mode: str, particles: list, n_particles: int, 
                  length: int, width: int, max_vx: int, max_vy: int, 
-                 delta_t: float, system_info: dict):
+                 max_t: int, delta_t: float, system_info: dict):
         
         assert mode in ["1D", "2D"], "Simluation must be 1D or 2D"
         self.mode = mode
@@ -40,12 +21,17 @@ class Simulation:
         self.width = width
 
         assert delta_t >= 0, "Time step cannot be zero or negative"
+        self.time = 0
+        self.max_t = max_t
         self.delta_t = delta_t 
-        
+
         self.particles = particles
         if len(self.particles) == 0:
             self.__init_particles(n_particles, max_vx, max_vy)
-        
+        else:
+            for i in range(len(particles)):
+                particles[i].id = i 
+
         self.system = System(self.particles, **system_info)
 
     def __repr__(self):
@@ -88,7 +74,7 @@ class Simulation:
                 v_y = np.random.choice(vy)
                 ypos.pop(ypos.index(y)) #Remove yposition so there won't be overlaps  
 
-            particle = Particle(index, length, width, mass, x, y, v_x, v_y)
+            particle = Particle(length, width, mass, x, y, v_x, v_y, index)
             self.particles.append(particle)
         
         print(self.__repr__())
@@ -110,13 +96,15 @@ class Simulation:
         * Compute new position and velocity for every particle by a time step 
         delta_t
         '''
-        if self.system.ke <= 0.5:
-            print("System is out of kinetic energy. Quitting the program")
+        if self.time >= self.max_t:
+            print("Program is out of time, terminating.")
             exit(0)
 
         for index, particle in enumerate(self.particles):
             self.particles[index] = self.system(self.delta_t, particle)
-
+        
+        self.time += self.delta_t 
+        
         self.__collision()
         return self.__init_animation()
     
@@ -154,12 +142,31 @@ class Simulation:
 
         self.animate = animation.FuncAnimation(
             fig, self.__animate, init_func = self.__init_animation, 
-            frames = 1600, interval = 2, blit = True
+            frames = 1600, interval = 1, blit = True
         )
         plt.show()
         
         
 if __name__ == "__main__":
+    #Sample simulation info 
+    simulation_info = {
+        "mode": "1D",
+        "particles": [],
+        "n_particles": 4,
+        "length": 30, 
+        "width": 10,
+        "max_vx": 5, 
+        "max_vy": 5,
+        "max_t": 10,
+        "delta_t": 1e-2
+    }
+
+    #Sample sytstem info 
+    system_info = {
+        "system_type": "elastic",
+        "kinetic_friction": 0.0,
+        "computational_method": "midpoint"
+    }
     simulation = Simulation(**simulation_info, system_info = system_info)
     simulation.animation()
 

@@ -102,7 +102,7 @@ class System:
             
             particle_1.vx = v1 
             particle_2.vx = v2 
-
+            
         return particle_1, particle_2 
 
     @property 
