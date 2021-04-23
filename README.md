@@ -34,7 +34,7 @@
    - <img src="https://render.githubusercontent.com/render/math?math=x_{n%2B1}=x_n%2B\frac{1}{2}(v_{n%2B1}%2Bv_n)dt">
 * **Verlet**:
    - <img src="https://render.githubusercontent.com/render/math?math=x_{n%2B1}=x_n%2Bv_ndt%2B\frac{1}{2}a_n(dt)^2">
-   - <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2B\frac{1}{2}(a_{n%2B1}%2B{a_n}dt">
-   - In the case of constant acceleration, we get <img src="https://render.githubusercontent.com/render/math?math=v_{n+1}=v_n%2Ba_ndt">
+   - <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2B\frac{1}{2}(a_{n%2B1}%2B{a_n})dt">
+   - In the case of constant acceleration, we get <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2Ba_ndt">
 
 
