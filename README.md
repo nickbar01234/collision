@@ -2,6 +2,18 @@
 ---
 * This project explores computational physics for collision in 1-dimension and 2-dimensions.
 ---
+## Usage
+* To begin continue working on this project, type into terminal `git clone github.com/nickbar01234/collision'
+* To run the program, type into terminal `python main.py input --output -p --length --dt --friction --method`
+   - `input` can be either '0' or '1'. Note that if it is **1** then all other arguments, besides --output, are required. **0** prompts a random configuration for the collision, users can edit the randomization in main.cpp, beginning at line 13. 
+   - `--output` is the output name of the csv file containing the position and velocity of each particle in the simulation. If output is not provided, then no files will be output.
+   - `-p` is the configuration of one Particle. Users can type as many -p as needed, a particle instance requires length, width, mass, x, y, vx, vy
+      - An example is -p 1, 2, 3, 4, 5, 6, 7. This corresponds to a particle of length 1, width 2, mass 3, x-position at 4, y-position at 5, x-velocity 6, y-velocity 7
+   - `length` specifies the boundary in the x direction that a particle can travel
+   - `--dt` is the time step for approximation. Smaller time step would result in a more accurate approximation
+   - `--friction` is the coefficient for kinetic friction.
+   - `--method` is the method of computation. Users can choose from **euler-cromer**, **midpoint**, or **verlet**
+---
 ## Physics
 ---
 1) **Defining the relationship between frictional force and acceleration**:
@@ -36,5 +48,11 @@
    - <img src="https://render.githubusercontent.com/render/math?math=x_{n%2B1}=x_n%2Bv_ndt%2B\frac{1}{2}a_n(dt)^2">
    - <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2B\frac{1}{2}(a_{n%2B1}%2B{a_n})dt">
    - In the case of constant acceleration, we get <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2Ba_ndt">
+---
+## Bugs 
+
+* If there are too many particles and not enough length for the particles to travel, the animation will have undefined behaviour. 
+   - https://user-images.githubusercontent.com/74647679/115838968-6427e680-a444-11eb-936c-f659d06f05d9.mp4
+
 
 
