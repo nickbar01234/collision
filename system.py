@@ -66,7 +66,7 @@ class System:
                 particle.vx = 0
                 particle.vx = -1 * vox
         
-            particle.update(length, width)
+            # particle.update(length, width)
 
         return particle  
         

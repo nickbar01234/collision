@@ -3,16 +3,18 @@ from system import *
 
 import numpy as np 
 import pprint
-
+import pandas as pd
 import matplotlib.pyplot as plt 
 from matplotlib import animation 
 import itertools 
 
 class Simulation:
-    def __init__(self, mode: str, particles: list, n_particles: int, 
+    def __init__(self, output: str, mode: str, particles: list, n_particles: int, 
                  length: int, width: int, max_vx: int, max_vy: int, 
                  max_t: int, delta_t: float, system_info: dict):
         
+        self.output = output 
+
         assert mode in ["1D", "2D"], "Simluation must be 1D or 2D"
         self.mode = mode
         
@@ -98,6 +100,8 @@ class Simulation:
         '''
         if self.time >= self.max_t:
             print("Program is out of time, terminating.")
+            df = self.__get_output()
+            df.to_csv(self.output + ".csv", index = False)
             exit(0)
 
         for index, particle in enumerate(self.particles):
@@ -140,16 +144,42 @@ class Simulation:
         self.ax.xaxis.set_ticks([])
         self.ax.yaxis.set_ticks([])
 
-        self.animate = animation.FuncAnimation(
-            fig, self.__animate, init_func = self.__init_animation, 
-            frames = 1600, interval = 1, blit = True
-        )
-        plt.show()
+        try:
+            self.animate = animation.FuncAnimation(
+                fig, self.__animate, init_func = self.__init_animation, 
+                frames = 1600, interval = 1, blit = True
+            )
+            plt.show()
+        except Exception as e:
+            exit(0)
         
+    def __get_output(self):
+        '''
+        * Get the position and velocity of each particle.
+        * NOTE: A dummy padding is applied if there is a length mismatch between 
+                columns.
+        '''
+        data = {}
+
+        for particle in self.particles:
+            data[str(particle.id) + "_x"] = particle.x
+            data[str(particle.id) + "_vx"] = particle.vx 
         
+        max_length = 0        
+        for key in data.keys():
+            max_length = len(data[key]) if len(data[key]) > max_length else max_length 
+        
+        for key in data.keys():
+            if len(data[key]) < max_length:
+                pad = [None for i in range(max_length - len(data[key]))]
+                data[key].extend(pad)
+
+        return pd.DataFrame(data)
+
 if __name__ == "__main__":
     #Sample simulation info 
     simulation_info = {
+        "output": "output",
         "mode": "1D",
         "particles": [],
         "n_particles": 4,
