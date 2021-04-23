@@ -21,7 +21,7 @@ def sample():
         "width": 10,
         "max_vx": 5, 
         "max_vy": 5,
-        "max_t": 10,
+        "max_t": 30,
         "delta_t": 1e-2
     }
 
@@ -71,7 +71,7 @@ def arguments():
     * Command line arguments. Can be read from a file @{filename}.
     * NOTE:
         - If first argument is 0 then all other command lines will be disregarded.
-        Simulation configuration will be used from sample (line 11).
+        Simulation configuration will be used from sample (line 13).
         - If first argument is 1, then --length, --time, --method is required
     '''
 
@@ -88,8 +88,7 @@ def arguments():
     "Enter '0' for random initialization and '1' for command line arguments"
 
     required = sys.argv[1] == '1'
-    parser.add_argument("--output", type = str, help = "Name of output file", 
-                        required = required)
+    parser.add_argument("--output", type = str, help = "Name of output file")
     parser.add_argument("-p", "--particles", nargs = "+", type = int, action = "append",
                         help = "Configuration: length, width, mass, x, y, vx, vy",
                         required = required)
@@ -117,7 +116,7 @@ def parse_argument(parser: argparse):
     if parser.input == 0:
         return sample()
     
-    filename = assert_output(parser.output)
+    filename = "" if parser.output is None else assert_output(parser.output)
 
     simulation_info = {
         "output": filename,

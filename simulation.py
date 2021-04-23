@@ -100,8 +100,9 @@ class Simulation:
         '''
         if self.time >= self.max_t:
             print("Program is out of time, terminating.")
-            df = self.__get_output()
-            df.to_csv(self.output + ".csv", index = False)
+            if self.output != "":
+                df = self.__get_output()
+                df.to_csv(self.output + ".csv", index = False)
             exit(0)
 
         for index, particle in enumerate(self.particles):
