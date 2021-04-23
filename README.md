@@ -50,7 +50,7 @@
    - <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2B\frac{1}{2}(a_{n%2B1}%2B{a_n})dt">
    - In the case of constant acceleration, we get <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2Ba_ndt">
 ---
-## Directory strucutre
+## Directory structure
 
 ```
 .
