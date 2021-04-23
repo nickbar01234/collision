@@ -1,6 +1,7 @@
 # Modeling collisions using Python and R 
 ---
 * This project explores computational physics for collision in 1-dimension and 2-dimensions.
+![Figure 1 2021-04-23 15-13-04](https://user-images.githubusercontent.com/74647679/115841497-0d6fdc00-a447-11eb-84c9-37078308bc32.gif)
 ---
 ## Usage
 * To begin continue working on this project, type into terminal `git clone github.com/nickbar01234/collision'
@@ -15,7 +16,7 @@
    - `--method` is the method of computation. Users can choose from **euler-cromer**, **midpoint**, or **verlet**
 ---
 ## Physics
----
+
 1) **Defining the relationship between frictional force and acceleration**:
 
 ![image](https://user-images.githubusercontent.com/74647679/114636345-f4518780-9cf0-11eb-81bf-7655837fe313.png)
@@ -34,7 +35,7 @@
    - <img src="https://render.githubusercontent.com/render/math?math=v_{2,f}=\frac{2m_1}{m_1+m_2} v_{1,o}%2B\frac{m_1-m_2}{m_1+m_2} v_{2,o}">
 ---
 ## Computational methods 
----
+
 * The application explores 3 different computational methods: **euler-cromer**, **midpoint**, and **verlet**. The exact derivation for each computational method can be found in 
 **Resources** section. 
 
@@ -52,7 +53,13 @@
 ## Bugs 
 
 * If there are too many particles and not enough length for the particles to travel, the animation will have undefined behaviour. 
-   - https://user-images.githubusercontent.com/74647679/115838968-6427e680-a444-11eb-936c-f659d06f05d9.mp4
+   - ![Figure 1 2021-04-23 15-21-26](https://user-images.githubusercontent.com/74647679/115842096-b0285a80-a447-11eb-8b4a-4681b2ce8bbe.gif)
+---
+## Resources
+
+1) Computational methods can be found here: https://www.compadre.org/PICUP/resources/Entry.cfm?ID=124892
+2) Christian wrote a great program on 2D elastic collision here. I used their logic to animate my program. The link can be found here: https://scipython.com/blog/two-dimensional-collisions/
+
 
 
 
