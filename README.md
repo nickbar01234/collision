@@ -50,6 +50,21 @@
    - <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2B\frac{1}{2}(a_{n%2B1}%2B{a_n})dt">
    - In the case of constant acceleration, we get <img src="https://render.githubusercontent.com/render/math?math=v_{n%2B1}=v_n%2Ba_ndt">
 ---
+## Directory strucutre
+
+```
+.
+|--- computation.py: Computational methods.
+|--- main.py: Main driver for the program.
+|--- output.csv: Sample output from the pre-set configurations.
+|--- particle.py: Represents a particle.
+|--- README.md
+|--- requirements.txt
+|--- sample_commands.txt: Users can copy and paste this into the command line to run the simulation.
+|--- simulation.py: Represents the simulation.
+|--- system.py: Compute elastic collision and apply computational method given a time step.
+```
+---
 ## Bugs 
 
 * If there are too many particles and not enough length for the particles to travel, or if the velocity are too high, the animation will have undefined behaviour. 
