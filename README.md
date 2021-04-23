@@ -52,7 +52,7 @@
 ---
 ## Bugs 
 
-* If there are too many particles and not enough length for the particles to travel, the animation will have undefined behaviour. 
+* If there are too many particles and not enough length for the particles to travel, or if the velocity are too high, the animation will have undefined behaviour. 
    - ![Figure 1 2021-04-23 15-21-26](https://user-images.githubusercontent.com/74647679/115842096-b0285a80-a447-11eb-8b4a-4681b2ce8bbe.gif)
 ---
 ## Resources
