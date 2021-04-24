@@ -16,10 +16,10 @@ def sample():
         "output": "output",
         "mode": "1D",
         "particles": [],
-        "n_particles": 4,
-        "length": 30, 
+        "n_particles": 2,
+        "length": 15, 
         "width": 10,
-        "max_vx": 5, 
+        "max_vx": 10, 
         "max_vy": 5,
         "max_t": 30,
         "delta_t": 1e-2
