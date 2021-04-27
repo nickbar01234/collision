@@ -7,6 +7,7 @@
 * To begin continue working on this project, type into terminal `git clone github.com/nickbar01234/collision`
 * Install depedencies by typing `pip install requirements.txt`
 * To run the program, type into terminal `python main.py input --output -p --length --dt --friction --method`
+   - Sample input commands can be found in sample_commands.txt or viewed on terminal via `cat sample_commands.txt`
    - `input` can be either '0' or '1'. Note that if it is **1** then all other arguments, besides --output, are required. **0** prompts a random configuration for the collision, users can edit the randomization in main.cpp, beginning at line 13. 
    - `--output` is the output name of the csv file containing the position and velocity of each particle in the simulation. If output is not provided, then no files will be output.
    - `-p` is the configuration of one Particle. Users can type as many -p as needed, a particle instance requires length, width, mass, x, y, vx, vy
