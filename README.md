@@ -12,7 +12,7 @@
    - `--output` is the output name of the csv file containing the position and velocity of each particle in the simulation. If output is not provided, then no files will be output.
    - `-p` is the configuration of one Particle. Users can type as many -p as needed, a particle instance requires length, width, mass, x, y, vx, vy
       - An example is -p 1, 2, 3, 4, 5, 6, 7. This corresponds to a particle of length 1, width 2, mass 3, x-position at 4, y-position at 5, x-velocity 6, y-velocity 7
-   - `length` specifies the boundary in the x direction that a particle can travel
+   - `--length` specifies the boundary in the x direction that a particle can travel
    - `--dt` is the time step for approximation. Smaller time step would result in a more accurate approximation
    - `--friction` is the coefficient for kinetic friction.
    - `--method` is the method of computation. Users can choose from **euler-cromer**, **midpoint**, or **verlet**
