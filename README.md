@@ -1,6 +1,6 @@
 # Modeling collisions using Python and R 
 ---
-* This project explores computational physics for collision in 1-dimension and 2-dimensions.
+* This project explores computational physics for collision in 1-dimension.
 ![Figure 1 2021-04-23 15-13-04](https://user-images.githubusercontent.com/74647679/115841497-0d6fdc00-a447-11eb-84c9-37078308bc32.gif)
 ---
 ## Usage
