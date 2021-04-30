@@ -1,19 +1,21 @@
 # Modeling collisions using Python and R 
 ---
-* This project explores computational physics for collision in 1-dimension and 2-dimensions.
+* This project explores computational physics for collision in 1-dimension.
 ![Figure 1 2021-04-23 15-13-04](https://user-images.githubusercontent.com/74647679/115841497-0d6fdc00-a447-11eb-84c9-37078308bc32.gif)
 ---
 ## Usage
-* To begin continue working on this project, type into terminal `git clone github.com/nickbar01234/collision'
+* To begin continue working on this project, type into terminal `git clone github.com/nickbar01234/collision`
+* Install depedencies by typing `pip install requirements.txt`
 * To run the program, type into terminal `python main.py input --output -p --length --dt --friction --method`
+   - Sample input commands can be found in sample_commands.txt or viewed on terminal via `cat sample_commands.txt`
    - `input` can be either '0' or '1'. Note that if it is **1** then all other arguments, besides --output, are required. **0** prompts a random configuration for the collision, users can edit the randomization in main.cpp, beginning at line 13. 
    - `--output` is the output name of the csv file containing the position and velocity of each particle in the simulation. If output is not provided, then no files will be output.
-   - `-p` is the configuration of one Particle. Users can type as many -p as needed, a particle instance requires length, width, mass, x, y, vx, vy
-      - An example is -p 1, 2, 3, 4, 5, 6, 7. This corresponds to a particle of length 1, width 2, mass 3, x-position at 4, y-position at 5, x-velocity 6, y-velocity 7
-   - `length` specifies the boundary in the x direction that a particle can travel
-   - `--dt` is the time step for approximation. Smaller time step would result in a more accurate approximation
+   - `-p` is the configuration of one Particle. Users can type as many -p as needed, a particle instance requires length, width, mass, x, y, vx, vy.
+      - An example is -p 1, 2, 3, 4, 5, 6, 7. This corresponds to a particle of length 1, width 2, mass 3, x-position at 4, y-position at 5, x-velocity 6, y-velocity 7.
+   - `--length` specifies the boundary in the x direction that a particle can travel.
+   - `--dt` is the time step for approximation. Smaller time step would result in a more accurate approximation.
    - `--friction` is the coefficient for kinetic friction.
-   - `--method` is the method of computation. Users can choose from **euler-cromer**, **midpoint**, or **verlet**
+   - `--method` is the method of computation. Users can choose from **euler-cromer**, **midpoint**, or **verlet**.
 ---
 ## Physics
 
@@ -31,8 +33,8 @@
 * Momentum of a system of particles is defined as <img src="https://render.githubusercontent.com/render/math?math=P=\sum_{i=1}^n m_iv_i$$$$\sum_{i=1}^n m_i v_{i, o}=\sum_{i=1}^n m_i v_{i, f}">.
 * Kinetic energy is defined as <img src="https://render.githubusercontent.com/render/math?math=\frac{1}{2}m_1v_{1,o}^2%2B\frac{1}{2}m_1v_{2,o}^2=\frac{1}{2}m_1v_{1,f}^2%2B\frac{1}{2}m_2v_{2,f}^2">.
 * Solving the simultaneous equation, we obtain the final velocities for each particle:
-   - <img src="https://render.githubusercontent.com/render/math?math=v_{1,f}=\frac{m_1-m_2}{m_1+m_2} v_{1,o}%2B\frac{2m_1}{m_1+m_2} v_{2,o}">
-   - <img src="https://render.githubusercontent.com/render/math?math=v_{2,f}=\frac{2m_1}{m_1+m_2} v_{1,o}%2B\frac{m_1-m_2}{m_1+m_2} v_{2,o}">
+   - <img src="https://render.githubusercontent.com/render/math?math=v_{1,f}=\frac{m_1-m_2}{m_1%2Bm_2} v_{1,o}%2B\frac{2m_1}{m_1%2Bm_2} v_{2,o}">
+   - <img src="https://render.githubusercontent.com/render/math?math=v_{2,f}=\frac{2m_1}{m_1%2Bm_2} v_{1,o}%2B\frac{m_1-m_2}{m_1%2Bm_2} v_{2,o}">
 ---
 ## Computational methods 
 
