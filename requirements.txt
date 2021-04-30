@@ -1,26 +1,35 @@
+altair==4.1.0
 anyio @ file:///D:/bld/anyio_1614388928330/work/dist
 argon2-cffi @ file:///D:/bld/argon2-cffi_1605217264330/work
+astor==0.8.1
 async-generator==1.10
 attrs @ file:///home/conda/feedstock_root/build_artifacts/attrs_1605083924122/work
 Babel @ file:///home/conda/feedstock_root/build_artifacts/babel_1605182336601/work
 backcall @ file:///home/conda/feedstock_root/build_artifacts/backcall_1592338393461/work
 backports.functools-lru-cache @ file:///home/conda/feedstock_root/build_artifacts/backports.functools_lru_cache_1616843134209/work
+base58==2.1.0
 bleach @ file:///home/conda/feedstock_root/build_artifacts/bleach_1612213472466/work
+blinker==1.4
 brotlipy==0.7.0
+cachetools==4.2.1
 certifi==2020.12.5
 cffi @ file:///D:/bld/cffi_1613414103629/work
 chardet @ file:///D:/bld/chardet_1610093673558/work
+click==7.1.2
 colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
 cryptography @ file:///D:/bld/cryptography_1616851819782/work
 cycler==0.10.0
 decorator @ file:///home/conda/feedstock_root/build_artifacts/decorator_1617865139205/work
 defusedxml @ file:///home/conda/feedstock_root/build_artifacts/defusedxml_1615232257335/work
 entrypoints @ file:///home/conda/feedstock_root/build_artifacts/entrypoints_1605121927639/work/dist/entrypoints-0.3-py2.py3-none-any.whl
+gitdb==4.0.7
+GitPython==3.1.14
 idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1593328102638/work
 importlib-metadata @ file:///D:/bld/importlib-metadata_1617116968046/work
 ipykernel @ file:///D:/bld/ipykernel_1617137456305/work/dist/ipykernel-5.5.3-py3-none-any.whl
 ipython @ file:///D:/bld/ipython_1616837006048/work
 ipython-genutils==0.2.0
+ipywidgets==7.6.3
 jedi @ file:///D:/bld/jedi_1610147001629/work
 Jinja2 @ file:///home/conda/feedstock_root/build_artifacts/jinja2_1612119311452/work
 json5 @ file:///home/conda/feedstock_root/build_artifacts/json5_1600692310011/work
@@ -32,6 +41,7 @@ jupyter-server==1.6.0
 jupyterlab @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_1617889543256/work
 jupyterlab-pygments @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_pygments_1601375948261/work
 jupyterlab-server @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_server_1617134349851/work
+jupyterlab-widgets==1.0.0
 kiwisolver==1.3.1
 MarkupSafe @ file:///D:/bld/markupsafe_1610127684851/work
 matplotlib==3.4.1
@@ -51,7 +61,9 @@ pickleshare @ file:///home/conda/feedstock_root/build_artifacts/pickleshare_1602
 Pillow==8.2.0
 prometheus-client @ file:///home/conda/feedstock_root/build_artifacts/prometheus_client_1617387394212/work
 prompt-toolkit @ file:///home/conda/feedstock_root/build_artifacts/prompt-toolkit_1616432837031/work
+protobuf==3.15.8
 pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1593275161868/work
+pydeck==0.6.2
 Pygments @ file:///home/conda/feedstock_root/build_artifacts/pygments_1615243893546/work
 pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1608055815057/work
 pyparsing==2.4.7
@@ -63,16 +75,25 @@ pywin32==300
 pywinpty @ file:///D:/bld/pywinpty_1602377673108/work
 pyzmq @ file:///D:/bld/pyzmq_1614611981521/work
 requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1608156231189/work
+scipy==1.6.3
 Send2Trash==1.5.0
 six @ file:///home/conda/feedstock_root/build_artifacts/six_1590081179328/work
+smmap==4.0.0
 sniffio @ file:///D:/bld/sniffio_1610318484496/work
+streamlit==0.80.0
 terminado @ file:///D:/bld/terminado_1617048977340/work
 testpath==0.4.4
+toml==0.10.2
+toolz==0.11.1
 tornado @ file:///D:/bld/tornado_1610094910414/work
 traitlets @ file:///home/conda/feedstock_root/build_artifacts/traitlets_1602771532708/work
+tzlocal==2.1
 urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1615828766818/work
+validators==0.18.2
+watchdog==2.0.3
 wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1600965781394/work
 webencodings==0.5.1
+widgetsnbextension==3.5.1
 win-inet-pton @ file:///D:/bld/win_inet_pton_1610147566412/work
 wincertstore==0.2
 zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1614945704755/work
