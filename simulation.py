@@ -1,3 +1,5 @@
+#https://stackoverflow.com/questions/58237086/how-to-animate-a-line-chart-in-a-streamlit-page
+
 from particle import * 
 from system import * 
 
@@ -7,7 +9,9 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 from matplotlib import animation 
 import itertools 
-
+import streamlit as st 
+import streamlit.components.v1 as components 
+ 
 class Simulation:
     def __init__(self, output: str, mode: str, particles: list, n_particles: int, 
                  length: int, width: int, max_vx: int, max_vy: int, 
@@ -35,6 +39,67 @@ class Simulation:
                 particles[i].id = i 
 
         self.system = System(self.particles, **system_info)
+        self.exit = True 
+
+    def animation(self):
+        '''
+        * Add animations to object. The computation is done from function call 
+        to __animate().
+        '''
+
+        fig, self.ax = plt.subplots()
+        for spine in ["top", "bottom", "left", "right"]:
+            self.ax.spines[spine].set_linewidth(2)
+        self.ax.set_aspect("equal", "box")
+        self.ax.set_xlim(0, self.length)
+        self.ax.set_ylim(0, self.width)
+        self.ax.xaxis.set_ticks([])
+        self.ax.yaxis.set_ticks([])
+
+        try:
+            self.animate = animation.FuncAnimation(
+                fig, self.__animate, init_func = self.__init_animation, 
+                frames = 1600, interval = 1, blit = True
+            )
+            plt.show()
+        except Exception as e:
+            exit(0)
+
+    def streamlit_animation(self):
+        '''
+        * Animation for streamlit.
+        '''
+        def animate(plot):
+            while True:
+                self.__animate(0)
+                rectangle = self.__init_animation()          
+
+                self.ax.patches = []
+                for i in rectangle:
+                    self.ax.add_patch(i)
+                
+                self.ax.texts = []
+                self.ax.text(0.5, self.width - 0.5, "KE:{:.2f}J".format(self.system.ke),
+                             color = "r", fontsize = "15")
+                momentum = sum([particle.mass * particle.vx[-1] for particle in self.particles])
+                self.ax.text(4, self.width - 0.5, r"Momentum:{:.2f}$kgm^2$".format(momentum),
+                             color = "r", fontsize = "15")
+                plot.pyplot(self.fig)
+
+        self.exit = False
+
+        self.__init_plot()
+        rectangle = self.__init_animation(False)   
+        for i in rectangle:
+            self.ax.add_patch(i)
+        
+        self.ax.text(0.5, self.width - 0.5, "KE:{:.2f}J".format(self.system.ke),
+                     color = "r", fontsize = "15")
+        momentum = sum([particle.mass * particle.vx[-1] for particle in self.particles])
+        self.ax.text(4, self.width - 0.5, r"Momentum:{:.2f}$kgm^2$".format(momentum),
+                    color = "r", fontsize = "15")
+        plot = st.pyplot(self.fig)
+        animate(plot)
 
     def __repr__(self):
         return f"Configuration\nMode: {self.mode}, Length: {self.length}, " + \
@@ -82,14 +147,14 @@ class Simulation:
         print(self.__repr__())
         print("Finish random initialization")
 
-    def __init_animation(self):
+    def __init_animation(self, add_patch: bool = True):
         '''
         * Initialize the initial frame for animation. 
         '''
         position = []
 
         for particle in self.particles:
-            position.append(particle.draw(self.ax))
+            position.append(particle.draw(self.ax, add_patch))
         
         return position 
 
@@ -98,12 +163,13 @@ class Simulation:
         * Compute new position and velocity for every particle by a time step 
         delta_t
         '''
-        if self.time >= self.max_t:
-            print("Program is out of time, terminating.")
-            if self.output != "":
-                df = self.__get_output()
-                df.to_csv(self.output + ".csv", index = False)
-            exit(0)
+        if self.exit:
+            if self.time >= self.max_t:
+                print("Program is out of time, terminating.")
+                if self.output != "":
+                    df = self.__get_output()
+                    df.to_csv(self.output + ".csv", index = False)
+                exit(0)
 
         for index, particle in enumerate(self.particles):
             self.particles[index] = self.system(self.delta_t, particle)
@@ -129,31 +195,7 @@ class Simulation:
                 self.particles[i], self.particles[j] = self.system.momentum(
                     self.particles[i], self.particles[j]
                 )
-        
-    def animation(self):
-        '''
-        * Add animations to object. The computation is done from function call 
-        to __animate().
-        '''
-
-        fig, self.ax = plt.subplots()
-        for spine in ["top", "bottom", "left", "right"]:
-            self.ax.spines[spine].set_linewidth(2)
-        self.ax.set_aspect("equal", "box")
-        self.ax.set_xlim(0, self.length)
-        self.ax.set_ylim(0, self.width)
-        self.ax.xaxis.set_ticks([])
-        self.ax.yaxis.set_ticks([])
-
-        try:
-            self.animate = animation.FuncAnimation(
-                fig, self.__animate, init_func = self.__init_animation, 
-                frames = 1600, interval = 1, blit = True
-            )
-            plt.show()
-        except Exception as e:
-            exit(0)
-        
+                
     def __get_output(self):
         '''
         * Get the position and velocity of each particle.
@@ -176,6 +218,16 @@ class Simulation:
                 data[key].extend(pad)
 
         return pd.DataFrame(data)
+
+    def __init_plot(self):
+        self.fig, self.ax = plt.subplots()
+        for spine in ["top", "bottom", "left", "right"]:
+            self.ax.spines[spine].set_linewidth(2)
+        self.ax.set_aspect("equal", "box")
+        self.ax.set_xlim(0, self.length)
+        self.ax.set_ylim(0, self.width)
+        self.ax.xaxis.set_ticks([])
+        self.ax.yaxis.set_ticks([])
 
 if __name__ == "__main__":
     #Sample simulation info 

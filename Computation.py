@@ -26,6 +26,7 @@ class Computation:
 
         particle.vx = particle.vx[-1] + acceleration * delta_t 
         particle.x = particle.x[-1] + particle.vx[-1] * delta_t 
+
         return particle 
 
     def __midpoint(self, delta_t: float, particle: Particle, acceleration: float):
@@ -46,7 +47,7 @@ class Computation:
 
         particle.x = particle.x[-1] + particle.vx[-1] * delta_t + 0.5 * \
                      acceleration * delta_t ** 2
-        particle.vx = particle.vx[-1] + 0.5 * acceleration * delta_t
+        particle.vx = particle.vx[-1] + 0.5 * (acceleration + acceleration) * delta_t
 
         return particle
     

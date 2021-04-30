@@ -83,13 +83,16 @@ class Particle:
         '''
         return 0.5 * self.mass * (self.vx[-1] ** 2 + self.vy[-1] ** 2) 
     
-    def draw(self, ax: plt.axes):
+    def draw(self, ax: plt.axes, add_patch: bool = True):
         '''
         * Represent a particle for animation.
         '''
         rectangle = Rectangle((self._x[-1], self._y[-1]), self.length, self.width, 
                                edgecolor = 'r', fill = False)
-        ax.add_patch(rectangle)
+        
+        if add_patch:
+            ax.add_patch(rectangle)
+            
         return rectangle
     
     def update(self, length: int = None, width: int = None):
