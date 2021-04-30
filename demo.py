@@ -15,6 +15,7 @@ import itertools
 import streamlit as st 
 import streamlit.components.v1 as components 
 from scipy.integrate import odeint
+from matplotlib.backends.backend_agg import RendererAgg
 
 class Particle:
     def __init__(self, length: float, width: float, mass: float,
@@ -334,34 +335,37 @@ class Simulation:
         '''
         def animate(plot):
             while True:
-                self.__animate(0)
-                rectangle = self.__init_animation()          
+                lock = RendererAgg.lock
+                with lock:
+                    self.__animate(0)
+                    rectangle = self.__init_animation()          
 
-                self.ax.patches = []
-                for i in rectangle:
-                    self.ax.add_patch(i)
-                
-                self.ax.texts = []
-                self.ax.text(0.5, self.width - 0.5, "KE:{:.2f}J".format(self.system.ke),
-                             color = "r", fontsize = "15")
-                momentum = sum([particle.mass * particle.vx[-1] for particle in self.particles])
-                self.ax.text(4, self.width - 0.5, r"Momentum:{:.2f}$kgm^2$".format(momentum),
-                             color = "r", fontsize = "15")
-                plot.pyplot(self.fig)
+                    self.ax.patches = []
+                    for i in rectangle:
+                        self.ax.add_patch(i)
+                    
+                    self.ax.texts = []
+                    self.ax.text(0.5, self.width - 0.5, "KE:{:.2f}J".format(self.system.ke),
+                                color = "r", fontsize = "15")
+                    momentum = sum([particle.mass * particle.vx[-1] for particle in self.particles])
+                    self.ax.text(4, self.width - 0.5, r"Momentum:{:.2f}$kgm^2$".format(momentum),
+                                color = "r", fontsize = "15")
+                    plot.pyplot(self.fig)
 
         self.exit = False
-
-        self.__init_plot()
-        rectangle = self.__init_animation(False)   
-        for i in rectangle:
-            self.ax.add_patch(i)
-        
-        self.ax.text(0.5, self.width - 0.5, "KE:{:.2f}J".format(self.system.ke),
-                     color = "r", fontsize = "15")
-        momentum = sum([particle.mass * particle.vx[-1] for particle in self.particles])
-        self.ax.text(4, self.width - 0.5, r"Momentum:{:.2f}$kgm^2$".format(momentum),
-                    color = "r", fontsize = "15")
-        plot = st.pyplot(self.fig)
+        lock = RendererAgg.lock
+        with lock:
+            self.__init_plot()
+            rectangle = self.__init_animation(False)   
+            for i in rectangle:
+                self.ax.add_patch(i)
+            
+            self.ax.text(0.5, self.width - 0.5, "KE:{:.2f}J".format(self.system.ke),
+                        color = "r", fontsize = "15")
+            momentum = sum([particle.mass * particle.vx[-1] for particle in self.particles])
+            self.ax.text(4, self.width - 0.5, r"Momentum:{:.2f}$kgm^2$".format(momentum),
+                        color = "r", fontsize = "15")
+            plot = st.pyplot(self.fig)
         animate(plot)
 
     def __repr__(self):
